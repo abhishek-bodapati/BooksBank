@@ -7,7 +7,7 @@
       <p class="mt-4 mb-8">
         {{ $t('register_description') }}
       </p>
-      <button class="w-full rounded-full py-3 border-2 mb-2" @click="handleClick('google')">
+      <button class="w-full rounded-full py-3 border-2 mb-2" @click="handleGoogle() ">
         {{ $t('continue-with-google') }}
       </button>
       <button class="w-full rounded-full py-3 border-2 bg-gray-400 text-white mb-2" @click="handleClick('facebook')">
@@ -32,7 +32,11 @@
 export default {
   methods: {
     handleClick (type) {
+      alert(type)
       this.$emit('click', type)
+    },
+    handleGoogle () {
+      window.location.href = 'login/google';
     }
   }
 }

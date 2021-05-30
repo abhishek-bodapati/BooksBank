@@ -49,9 +49,11 @@ return [
         'client_secret' => env('GITHUB_CLIENT_SECRET'),
     ],
 
-    'google' => [
-        'api' => env('GOOGLE_API'),
-    ],
+    'google' => [    
+        'client_id' => env('GOOGLE_CLIENT_ID'),  
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),  
+        'redirect' =>  'http://localhost:8000/login/google/callback'
+      ],
     
     'sendinblue' => [
         'api' => env('SENDINBLUE_API_KEY'),

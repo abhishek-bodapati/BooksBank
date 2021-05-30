@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/welcome', function () {
 //     return view('welcome');
 // });
+
+// Social Login
+Route::get('login/google', 'Auth\LoginController@redirectToProvider');
+Route::get('login/google/callback', 'Auth\LoginController@handleProviderCallback');
