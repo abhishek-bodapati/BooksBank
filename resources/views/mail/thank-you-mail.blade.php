@@ -1,3 +1,7 @@
+@php
+  $APP_URL = config('app.url')
+@endphp
+
 @extends('layouts.email')
 @section('body')
   <tr>
@@ -15,20 +19,8 @@
 
       <h4 class="text" style="color:#333333; font-family:'Open Sans', Helvetica, Arial, sans-serif; font-size:14px; font-weight:300; font-style:normal; letter-spacing:normal; line-height:25px; text-transform:none; padding:0; margin:0; text-align: left;">
         <p>
-          Book name: {{ $ledge->book->title }}
+          Thank you for returning {{ ucwords($ledge->book->title) }}!
         </p>
-        @if ($ledge->status == 6)
-        <p>
-          Unfortuantely, your book request has been rejected from the user. We apologies for the inconvenience.
-        </p>
-        @else
-        <p>
-          Great News, your book request has been accepted! Do not forget to pick you the book at the time and place mentioned below:<br/><br/>
-          <b>Pick up date/time:</b> {{ date('d F Y, h:i:s A', strtotime($ledge->pickup_date)) }}<br/>
-          <b>Address:</b> {{ $ledge->lender->bookshelf->address_line_1 }}, {{ $ledge->lender->bookshelf->city }}, {{ $ledge->lender->bookshelf->postcode }}
-        </p>
-        </p>
-        @endif
       </h4>
     </td>
   </tr>

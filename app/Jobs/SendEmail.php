@@ -2,28 +2,34 @@
 
 namespace App\Jobs;
 
-use App\Enums\LedgeStatus;
-use App\Mail\PickupBookMail;
-use App\Models\Ledge;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Mail\Mailable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
-class PickupBookJob implements ShouldQueue
+class SendEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    protected $mailable;
+    protected $data;
+    protected $email;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($mailable_name, $data, $email)
     {
-        //
+        $this->mailable = $mailable_name;
+        $this->data = $data;
+        $this->email = $email;
     }
 
     /**
@@ -33,12 +39,6 @@ class PickupBookJob implements ShouldQueue
      */
     public function handle()
     {
-        $ledges = Ledge::with(['lender', 'borrower', 'book'])->get();
-        foreach ($ledges as $ledge) {
-            if ($ledge->status === LedgeStatus::WaitingPickup && $ledge->pickup_date->format('H:i:s') <= now()->toTimeString())
-            {
-                Mail::to($ledge->lender->email)->queue(new PickupBookMail($ledge));
-            }
-        }
+        Mail::to($this->email)->send(new $this->mailable($this->data));
     }
 }

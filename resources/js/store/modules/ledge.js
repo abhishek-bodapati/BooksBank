@@ -20,18 +20,27 @@ export const getters = {
   borrowed: (state, getter, rootGetter) => {
     let items = []
     state.items.forEach(item => {
-      if (item.borrower_id !== rootGetter.auth.user.id || item.status !== 2) return
+      if (item.borrower_id !== rootGetter.auth.user.id || item.status !== 2 || item.status !== 5) return
       const conditionIndex = item.book.bookshelf_item.find(bookshelfItem => bookshelfItem.id === item.bookshelf_item_id).condition
+      const returnDate = DateTime.fromISO(item.return_date).toUTC().toFormat('cccc, d LLLL')
       const value = {
         id: item.id,
         bookshelf_item_id: item.bookshelf_item_id,
         borrower: item.borrower.name,
         book: item.book.title,
         condition: rootGetter.library.conditions[conditionIndex].name,
-        return_date: item.return_date,
-        status: state.status[item.status]
+        return_date: returnDate
       }
       items.push(value)
+    })
+
+    return items
+  },
+  borrowedWithDetails: (state, getter, rootGetter) => {
+    let items = []
+    state.items.forEach(item => {
+      if (item.borrower_id !== rootGetter.auth.user.id || item.status !== 2 || item.status !== 5) return
+      items.push(item)
     })
 
     return items
@@ -39,15 +48,16 @@ export const getters = {
   lent: (state, getter, rootGetter) => {
     let items = []
     state.items.forEach(item => {
-      if (item.lender_id !== rootGetter.auth.user.id || item.status !== 2) return
+      if (item.lender_id !== rootGetter.auth.user.id || item.status !== 2 || item.status !== 5) return
       const conditionIndex = item.book.bookshelf_item.find(bookshelfItem => bookshelfItem.id === item.bookshelf_item_id).condition
+      const returnDate = DateTime.fromISO(item.return_date).toUTC().toFormat('cccc, d LLLL')
       const value = {
         id: item.id,
         bookshelf_item_id: item.bookshelf_item_id,
         borrower: item.borrower.name,
         book: item.book.title,
         condition: rootGetter.library.conditions[conditionIndex].name,
-        return_date: item.return_date
+        return_date: returnDate
       }
       items.push(value)
     })
@@ -142,5 +152,5 @@ export const actions = {
   async returned ({ commit }, { ledgeId }) {
     const { data } = await axios.put(`/api/ledge/returned/${ledgeId}`)
     console.log(data)
-  },
+  }
 }

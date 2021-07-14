@@ -1,6 +1,7 @@
 @php
-$APP_URL = env('APP_URL', 'http://localhost:8000')
+  $APP_URL = config('app.url')
 @endphp
+
 @extends('layouts.email')
 @section('body')
   <tr>
@@ -21,6 +22,7 @@ $APP_URL = env('APP_URL', 'http://localhost:8000')
           Book name: {{ $ledge->book->title }}
         </p>
       </h4>
+
       <p>
         Has the above book being picked up from {{ $ledge->borrower->name }}?
       </p>
