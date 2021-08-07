@@ -49,6 +49,11 @@
   "failed_to_verify_email": "Failed to verify email.",
   "verify_email_address": "We sent you an email with an the verification link.",
 
+  "about": "About",
+  "privacyPolicy": "Privacy Policy",
+  "terms": "Terms and Condition",
+  "safeguarding": "Safeguarding",
+
   "search": "Search",
   "use_current_location": "Use current location",
   "continue-with-google": "Continue with google",
@@ -58,8 +63,6 @@
   "signin-title": "Login to your account",
   "signin-description": "Sign in, using your preferred method, or quickly create an account.",
 
-  "privacyPolicy": "Privacy Policy",
-  "terms": "Terms and Condition",
 
   "register_title": "Create your account",
   "register_description": "Join the community by using one of the method below.",
@@ -96,26 +99,26 @@
   "bookshelfAdd-steps-step1-description": "Search out database with millions of books available",
   "bookshelfAdd-steps-step2-title": "Set it's condition",
   "bookshelfAdd-steps-step2-description": "Provide some quick details for users to know",
-  "bookshelfAdd-steps-step3-title": "Review and Finish",
-  "bookshelfAdd-steps-step3-description": "Review your information and add make the book available",
   "bookshelfAdd-step1-search-label": "Enter Book Title and/or author",
   "bookshelfAdd-step2-title": "Set it's condition",
   "bookshelfAdd-step2-description": "Select the condition that best describe our book",
-  "bookshelfAdd-step3-title": "Review time",
-  "bookshelfAdd-step3-description": "Review the following information before adding your book",
+  "bookshelfAdd-step3-title": "Select what do you want to do with your book",
 
   "bookshelfAddNoBookshelfBanner-title": "Bookshelf registration required!",
   "bookshelfAddNoBookshelfBanner-paragraph": "Your bookshelf need to be fully configured to be able to add books into it.<br/>Click the link below to quickly complete the registration of your bookshelf",
   "bookshelfAddNoBookshelfBanner-button": "Complete registration",
   
+  "bookshelfAll-title": "Bookshelf info",
   "bookshelfAll-BooksYouAreReading": "The books you are reading",
   "bookshelfAll-BookYouOwn": "The books you own",
+  "bookshelfInfo-title": "Bookshelf requests",
 
   "bookshelfSettings-timeslot-title": "Choose your preferred time for the book to be picked up",
 
   "libraryBorrow-noBooks": "Why not tweet this or invite your friends to join and start thier own library?",
   "libraryBorrow-noBooks-heading": "There are still not enough books in your searched area!",
   "libraryBorrow-searchBooks": "Search result",
+  "libraryBorrow-filterBy": "Filter by",
   "libraryBorrow-searchTitleLabel": "You searched for",
   "libraryBorrow-searchOtherBooks": "Other books available within your radius",
   "libraryBorrow-timeslot-title": "Available times to pick up. Please select at least 3 slots before continuing",

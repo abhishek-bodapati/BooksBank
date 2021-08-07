@@ -21,4 +21,6 @@ final class LedgeStatus extends Enum
     const AwaitingReturn = 4;
     const Completed = 5;
     const Rejected = 6;
+    const GivenAway = 7;
+    const Cancelled = 8;
 }

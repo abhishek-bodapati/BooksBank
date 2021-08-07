@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Ledge;
 use App\Models\Bookshelf_item;
 use App\Enums\LedgeStatus;
+use App\Enums\BookStatus;
+use App\Enums\BookshelfItemType;
 use App\Jobs\SendEmail;
 
 class ManagementController extends BaseController
@@ -24,8 +26,10 @@ class ManagementController extends BaseController
         $userId = Auth::id();
 
         $result = Ledge::with(['book', 'lender', 'borrower', 'book.bookshelf_item'])
+                       ->whereNotIn('status', [LedgeStatus::GivenAway, LedgeStatus::Completed, LedgeStatus::Cancelled])
                        ->where('lender_id', $userId)
                        ->orWhere('borrower_id', $userId)
+                       ->orderBy('id', 'DESC')
                        ->get();
 
         return $this->responseJson(true, 200, 'Ledges fetched!', $result);
@@ -218,7 +222,7 @@ class ManagementController extends BaseController
     }
 
     /**
-     * Collect a book
+     * Collect a book. Change the status to either in progress of completed depending from the book transaction type
      *
      * @param \Illuminate\Http\Request $request
      * @param $id
@@ -239,9 +243,55 @@ class ManagementController extends BaseController
             return response()->json(['error' => 'Ledge is not awaiting pickup.'], 409);
         }
 
+
         try {
+
+            $transactionType = $ledge->bookshelf_item->type;
+            switch ($transactionType) {
+                case BookshelfItemType::GiveAway:
+                    $this->handleGiveAway($ledge);
+                    break;
+                
+                default:
+                    $ledge->update([
+                        'status' => LedgeStatus::InProgress
+                    ]);
+                    break;
+            }
+
+            return response()->json(['success' => $ledge]);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+    
+    /**
+     * Cancel a book request
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function cancel(Request $request, $id)
+    {
+        $ledge = Ledge::find($id);
+
+        // check if the user is the owner of the ledge
+        $userId = Auth::id();
+        if ($userId != $ledge->lender_id) {
+            return response()->json(['error' => 'Not authorized.'], 403);
+        }
+
+        if ($ledge->status !== LedgeStatus::WaitingPickup) {
+            return response()->json(['error' => 'Ledge is not awaiting pickup.'], 409);
+        }
+
+
+        try {
+            
             $ledge->update([
-                'status' => LedgeStatus::InProgress
+                'status' => LedgeStatus::Cancelled
             ]);
 
             return response()->json(['success' => $ledge]);
@@ -249,6 +299,7 @@ class ManagementController extends BaseController
             throw $e;
         }
     }
+
     /**
      * Complete book return
      *
@@ -280,5 +331,16 @@ class ManagementController extends BaseController
         } catch (Exception $e) {
             throw $e;
         }
+    }
+
+    private function handleGiveAway($ledge) {
+
+        $ledge->update([
+            'status' => LedgeStatus::GivenAway
+        ]);
+
+        $ledge->bookshelf_item->update([
+            'status' => BookStatus::Deleted
+        ]);
     }
 }

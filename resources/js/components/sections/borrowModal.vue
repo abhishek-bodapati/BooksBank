@@ -40,9 +40,12 @@
           <p class="font-semibold">{{ selectedDate }}</p>
           <h2>Collection time:</h2>
           <p class="font-semibold">{{ times[timeSlot] }}</p>
+          <!-- We just show the return date if the book is of type borrow -->
           <hr>
-          <h2>Book return date:</h2>
-          <p class="font-semibold">{{ returnDate.toFormat('yyyy-LL-dd') }}</p>
+          <template v-if="selectedBook.type === 0">
+            <h2>Book return date:</h2>
+            <p class="font-semibold">{{ returnDate.toFormat('yyyy-LL-dd') }}</p>
+          </template>
           <Button :disabled="submitDisabled" @click="onSendRequest">
             Send Request
           </Button>
@@ -58,6 +61,7 @@ import { DateTime } from 'luxon'
 import Swal from 'sweetalert2'
 
 export default {
+  middleware: 'auth',
   props: {
     show: {
       type: Boolean,
@@ -84,10 +88,10 @@ export default {
       return { weekdays: this.disabledDays }
     },
     submitDisabled () {
-      const dateSelected = !!this.DaySlot
-      const timeSelected = !!this.timeSlot
+      const dateSelected = this.DaySlot === null
+      const timeSelected = this.timeSlot === null
 
-      return !dateSelected || !timeSelected
+      return dateSelected || timeSelected
     },
     disabledDays () {
       const weekDays = [ 1, 2, 3, 4, 5, 6, 7 ]

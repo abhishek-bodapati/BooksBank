@@ -14,11 +14,11 @@
 
       <div class="my-3">
         <fa icon="map-marker-alt" />
-        {{ formattedDistance }} Miles</div>
+        {{ formattedDistance }} Miles from your location</div>
 
       <div class="flex justify-between items-baseline flex-col-reverse md:flex-row">
         <button class="flex items-center w- text-xs uppercase font-bold text-gray-800 hover:opacity-75 rounded-full py-3 px-8 bg-gray-200" @click="$emit('click')">
-          Borrow
+          {{ transactionType }}
         </button>
         <span class="md:self-end">Condition: <span class="font-semibold">{{ condition }}</span></span>
       </div>
@@ -45,6 +45,10 @@ export default {
       default: 'https://picsum.photos/300/500'
     },
     condition: {
+      type: String,
+      required: true
+    },
+    transactionType: {
       type: String,
       required: true
     },
